@@ -201,10 +201,13 @@
             }
         }
         function convertToNumber(value) {
-            if (isNaN(value)) {
+            console.log(value);
+            if (isNaN(value) || value === "") {
+                console.log("isNaN");
                 return value;  // Not a number, return the original string
             }
-    
+            
+            
             let numberValue = parseFloat(value);
     
             // Check if it's an integer (not a float)
@@ -219,7 +222,11 @@
             
             if (!element) return null;
             // element can be input, table, tabledata, tableheader, tablerow
-            if (element.tagName === "INPUT") return convertToNumber(element.value.trim());
+            if (element.tagName === "INPUT"){
+                
+                
+                return convertToNumber(element.value);
+            }
             if (element.tagName === "TABLE"){
                 let result = null;
                 
@@ -231,10 +238,10 @@
                     return result;
                 }
                 if (element.getAttribute('data-type') === 'object'){
-                    console.log("object");
+                    
                     let result = {};
                     if (element.hasChildNodes()){
-                    console.log("kids");
+                    
                     [].slice.call(element.children).forEach(tablerow => {
                         let key = extractData(tablerow.children[0]);
                         let value = extractData(tablerow.children[1]);
