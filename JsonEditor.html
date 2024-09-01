@@ -155,7 +155,8 @@
                 }
             }
         }
-    } else {
+    } else if (jsonData === null) return;
+    else{
         // Handle primitive values
         element = document.createElement("input");
         element.type = "text";

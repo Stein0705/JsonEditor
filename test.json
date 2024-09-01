@@ -1,0 +1,20 @@
+{
+    "list": [1, "two", 3.0, null, {"key": "value"}, []],
+    "dict": {
+        "integer": 42,
+        "float": 3.14159,
+        "string": "Hello, world!",
+        "empty_string": "",
+        "null_value": null,
+        "nested_list": [true, false, {"nested_key": "nested_value"}],
+        "nested_dict": {
+            "inner_key": "inner_value",
+            "inner_list": [10, 20, 30]
+        }
+    },
+    "int_value": 100,
+    "float_value": 99.99,
+    "string_value": "Just a string",
+    "empty_string_value": "",
+    "null_value": null
+}
