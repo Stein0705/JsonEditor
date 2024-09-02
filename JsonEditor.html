@@ -68,6 +68,13 @@
         tr:nth-child(odd) {
             background-color: #444;
         }
+        .booltd{
+            border: 1px solid #0026ff;
+            padding: 8px 12px;
+            word-wrap: break-word;
+            text-align: center;
+        }
+
 
         input[type="text"] {
             width: 100%;
@@ -97,6 +104,18 @@
             color: #fff;
             font-size: 16px;
         }
+        
+        .true{
+            background-color: lightgreen;
+            border-radius:20px;
+            text-align: center;
+        }
+        .false{
+            background-color: lightcoral;
+            border-radius:20px;
+            text-align: center;
+        }
+        
     </style>
 </head>
 <body>
@@ -158,16 +177,37 @@
     } else if (jsonData === null) return;
     else{
         // Handle primitive values
-        element = document.createElement("input");
-        element.type = "text";
-        element.value = jsonData; // Set the value of the input to the primitive data
+        if (typeof jsonData === 'boolean'){
+            console.log("bool");
+            element = document.createElement("div");
+            element.className = "td " + jsonData.toString();
+            element.textContent = jsonData.toString();
+            element.addEventListener('click', () => ToggleBool(element));
+        }
+        else{
+            element = document.createElement("input");
+            element.type = "text";
+            element.value = jsonData; // Set the value of the input to the primitive data
+        }
     }
 
     // Append the created element to the container
     container.appendChild(element);
-}
+        }
 
+    function ToggleBool(element){
+        if (element.classList.contains("true")){
+            element.classList.remove('true');
+            element.classList.add('false');
+            element.textContent = 'false';
+        }
+        else {
+                element.classList.remove('false');
+                element.classList.add('true');
+                element.textContent = 'true';
+            }
 
+    }
         
     
 
@@ -227,7 +267,13 @@
                 
                 return convertToNumber(element.value);
             }
-            if (element.tagName === "TABLE"){
+            else if (element.classList.contains("true")){ 
+                return true;
+            }
+            else if (element.classList.contains("false")){
+                return false;
+            }
+            else if (element.tagName === "TABLE"){
                 let result = null;
                 
                 if (element.getAttribute('data-type') === "array"){ // element is table (list)
@@ -237,7 +283,7 @@
                     });
                     return result;
                 }
-                if (element.getAttribute('data-type') === 'object'){
+                else if (element.getAttribute('data-type') === 'object'){
                     
                     let result = {};
                     if (element.hasChildNodes()){
