@@ -1,0 +1,142 @@
+:root{
+    --primary-color: lightcoral;
+    --secondary-color: #333;
+}
+
+body{
+    background-color: var(--secondary-color);
+    
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-top: 20px;
+    font-size: 2em;
+    text-align: center;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--primary-color);
+}
+
+table{
+    width: 100%;
+    table-layout: auto;
+    border: 1px solid var(--primary-color);
+    min-height: 42px;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+td{
+    display:flex;
+    min-height: 42px;
+}
+
+
+th{
+    
+    background-color: var(--primary-color);
+    
+}
+
+.typeselector{
+    flex-shrink: 0;         /* Prevent the small element from shrinking */
+    width: 30px;
+    
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    color: var(--primary-color);
+    box-sizing: border-box;
+    text-align: center;
+    
+}
+
+
+
+.textfield{
+    flex-grow: 1;           /* Allow the textarea to grow and fill remaining space */
+    resize: both;
+    box-sizing: border-box; 
+    
+    background : transparent;
+    display:inline-flex;
+    
+}
+
+
+.bool{
+    flex-grow: 1;           /* Allow the textarea to grow and fill remaining space */
+    
+    box-sizing: border-box; 
+    
+    background : transparent;
+    display: inline-flex;
+    
+    border-radius: 8px;
+    text-align: center;
+    justify-content: center;
+}
+
+.booltrue{
+    color: var(--secondary-color);
+    background-color: lightgreen;
+    border: 1px solid green;
+}
+
+.boolfalse{
+    color: var(--secondary-color);
+    background-color: lightcoral;
+    border: 1px solid red;
+}
+
+th > .textfield{
+    resize: none;
+    text-align: center;
+    border: var(--secondary-color);
+    border-radius: 8px;
+    color: var(--secondary-color);
+}
+
+td > .textfield{
+    border: var(--primary-color);
+    border-radius: 8px;
+    color: var(--primary-color);
+}
+
+.typeselector-dialog-window{
+    background-color: var(--secondary-color);
+    border: var(--primary-color) 5px solid;
+}
+
+dialog::backdrop{
+    backdrop-filter: blur(3px);
+}
+
+.typeselector-dialog-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    background-color: var(--secondary-color);
+
+}
+.typeselector-dialog-option{
+    border-radius: 8px;
+    border: 1px var(--primary-color) solid;
+    text-align: center;
+    color: var(--primary-color);
+    font-size: xx-large;
+    margin: 0.25em;
+}

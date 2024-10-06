@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Editor</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff9800;
+            margin-top: 20px;
+            font-size: 2em;
+        }
+
+        button {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #fb8c00;
+        }
+
+        table {
+            border: 1px solid #444;
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+            background-color: #444;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: auto; /* Dynamic resizing */
+            display: inline-block;
+            
+        }
+
+        th, td {
+            border: 1px solid #555;
+            padding: 8px 12px;
+            word-wrap: break-word;
+            text-align: left;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #ff9800;
+            color: #fff;
+            text-align: center;
+            display: inline-block;
+        }
+
+        tr:nth-child(even) {
+            background-color: #555;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #444;
+        }
+        .booltd{
+            border: 1px solid #0026ff;
+            padding: 8px 12px;
+            word-wrap: break-word;
+            text-align: center;
+        }
+
+
+        input[type="text"] {
+            width: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: inherit; /* Match the input background to the td background */
+            color: inherit; /* Match the input text color to the td text color */
+            box-sizing: border-box;
+            
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            display: inline-block;
+        }
+
+        table table {
+            margin: 10px;
+            table-layout: auto;
+        }
+
+        th input[type="text"] {
+            text-align: center; /* Center align the key text */
+        }
+
+        #file-info {
+            margin: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .true{
+            width: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: inherit; /* Match the input background to the td background */
+            background-color: lightgreen; /* Match the input text color to the td text color */
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .false{
+            width: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: inherit; /* Match the input background to the td background */
+            background-color:lightcoral; /* Match the input text color to the td text color */
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .typeselector{
+            text-align: center;
+            background-color: olive;
+            display: inline-block;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>JSON Editor</h1>
+
+    <!-- File input and button for loading JSON -->
+    <div>
+        <input type="file" id="file-input" accept=".json" style="display:none;">
+        <button id="load-json">Load JSON</button>
+        <button id="save-json">Save JSON</button>
+        <div id="file-info">No file chosen</div>
+    </div>
+
+    <div id="table-container"></div>
+
+    <script>
+        let uploadedFileName = 'edited_data.json'; // Default file name
+        function displayJSONAsTable(jsonData, container) {
+            // Create typeselector object as constant 
+            console.log(container);
+            console.log(container.tagName);
+            const typeselector = document.createElement("typeselector");
+            typeselector.addEventListener('click', () => ChangeType(typeselector));
+            container.appendChild(typeselector);
+
+            // Create appropriate values and append to container
+            if (container.tagName === "TH"){
+                value = document.createElement("input")
+                value.type = "text";
+                value.value = jsonData;
+                container.appendChild(value);
+                return;
+            }
+            else if (typeof jsonData === "string"){
+                typeselector.textContent = 'abc';
+                
+                value = document.createElement("input");
+                value.type = "text";
+                value.value = jsonData;
+                
+                container.appendChild(value);
+            }
+            else if(typeof jsonData === "number"){
+                
+                typeselector.textContent = '123';
+                
+                value = document.createElement("input")
+                value.type = "text";
+                value.value = jsonData.toString(10);
+                
+                container.appendChild(value);
+            }
+            else if (typeof jsonData === "boolean"){
+                
+                
+                
+                typeselector.textContent = 't/f';
+                value = document.createElement("booltd");
+                value.className = "td " + jsonData.toString();
+                value.textContent = jsonData.toString();
+                
+                
+                
+                value.addEventListener('click', () => ToggleBool(value));
+                
+                container.appendChild(value);
+            }
+            else if (jsonData === null){
+                
+                
+                typeselector.textContent = 'N/A';
+                
+                
+            }
+            else if (Array.isArray(jsonData)){
+                
+                
+                typeselector.textContent = '[#]';
+                
+                value = document.createElement("table")
+                jsonData.forEach((item) => {
+                let row = document.createElement("tr");
+                let cell = document.createElement("td");
+
+                // Recursively handle each item in the array
+                displayJSONAsTable(item, cell);
+                row.appendChild(cell);
+                
+                container.appendChild(row);
+            });
+            }
+            else if (typeof jsonData === "object"){
+                
+                
+                typeselector.textContent = '{#}';
+                
+                table = document.createElement("table")
+                for (let key in jsonData) {
+                    if (jsonData.hasOwnProperty(key)) {
+                        let row = document.createElement("tr");
+
+                        const keyCell = document.createElement("th");
+                        const valueCell = document.createElement("td");
+
+                        // Recursively handle the key (as a string) and the value
+                        displayJSONAsTable(key, keyCell);
+                        displayJSONAsTable(jsonData[key], valueCell);
+
+                        row.appendChild(keyCell);
+                        row.appendChild(valueCell);
+                        
+                        table.appendChild(row);
+                    }
+                }
+            
+            
+                
+                container.appendChild(table);
+            }
+    
+            
+            console.log(container.children);
+            
+        }
+
+    function ToggleBool(element){
+        if (element.classList.contains("true")){
+            element.classList.remove('true');
+            element.classList.add('false');
+            element.textContent = 'false';
+        }
+        else {
+                element.classList.remove('false');
+                element.classList.add('true');
+                element.textContent = 'true';
+            }
+
+    }
+        
+    function ChangeType(element){
+        console.log(element);
+    }
+
+
+
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/json') {
+                uploadedFileName = file.name; // Save the uploaded file name
+                document.getElementById('file-info').textContent = file.name; // Display the file name
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    //try {
+                        let Jason = JSON.parse(e.target.result);
+                        console.log(Jason);
+                        const container = document.getElementById('table-container');
+                        container.innerHTML = '';
+                        displayJSONAsTable(Jason, container);
+                    //} catch (error) {
+                        ///alert('Failed to parse JSON: ' + error.message);
+                    //}
+                    
+                    
+                };
+
+                reader.readAsText(file);
+            } else {
+                alert('Please select a valid JSON file.');
+            }
+        }
+        function convertToNumber(value) {
+            console.log(value);
+            if (isNaN(value) || value === "") {
+                console.log("isNaN");
+                return value;  // Not a number, return the original string
+            }
+            
+            
+            let numberValue = parseFloat(value);
+    
+            // Check if it's an integer (not a float)
+            if (Number.isInteger(numberValue)) {
+                return parseInt(value, 10);
+            }
+    
+            return numberValue;  // Return as float if it's not an integer
+        }
+
+        function extractData(element) {
+            
+            if (!element) return null;
+            // element can be input, table, tabledata, tableheader, tablerow
+            if (element.tagName === "INPUT"){
+                
+                
+                return convertToNumber(element.value);
+            }
+            else if (element.classList.contains("true")){ 
+                return true;
+            }
+            else if (element.classList.contains("false")){
+                return false;
+            }
+            else if (element.tagName === "TABLE"){
+                let result = null;
+                
+                if (element.getAttribute('data-type') === "array"){ // element is table (list)
+                    let result = [];
+                    [].slice.call(element.children).forEach(tablerow => {
+                        result.push(extractData(tablerow.children[0]));
+                    });
+                    return result;
+                }
+                else if (element.getAttribute('data-type') === 'object'){
+                    
+                    let result = {};
+                    if (element.hasChildNodes()){
+                    
+                    [].slice.call(element.children).forEach(tablerow => {
+                        let key = extractData(tablerow.children[0]);
+                        let value = extractData(tablerow.children[1]);
+                        result[key] = value;
+                    });
+                }
+                    return result;
+                }   
+                
+                
+            }
+            
+            return extractData(element.children[0]) // This happens if it is a th or td, do just get its direct child
+        }
+
+
+        function handleSaveJSON() {
+            const table = document.querySelector('#table-container table');
+            if (table) {
+                const jsonData = extractData(table);
+                const jsonString = JSON.stringify(jsonData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = uploadedFileName; // Use the original file name
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                console.log("File saved successfully.");
+            } else {
+                console.log("No table found to save.");
+            }
+        }
+
+        document.getElementById('load-json').addEventListener('click', () => {
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+
+        document.getElementById('save-json').addEventListener('click', handleSaveJSON);
+    </script>
+    
+</body>
+</html>
