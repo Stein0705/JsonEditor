@@ -3,10 +3,10 @@ With this Json Viewer / Editor, you can open any json files on your computer and
 Features:
   - Handles null, strings, bools, int, float, arrays and object
   - Strings, bools int and float can be edited
+  - Ability to change any data type
 
 Features to come:
-  - editing of array and object structure itself
-  - Editing null
-  - Beeing able to change any data type to any other
+  - Editing of array and object structure itself
+ (- Ability to select colors in the editor)
 
 Please be careful when using this to edit files in important circumstances like production, as it could still have unexpected behavior.
