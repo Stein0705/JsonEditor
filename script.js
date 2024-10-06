@@ -11,12 +11,28 @@ window.onload = function () {
     for(let i = 0; i < 6; i++){
         document.getElementById("typeselector-dialog").children[1].children[i].addEventListener("click", () =>{ SelectType(document.getElementById("typeselector-dialog").children[1].children[i].textContent)});
     }
-        
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("source") !== null){
+        document.getElementById('file-info').textContent = "Please wait for the API to respond. This may take a few seconds.";
+        GetDataFromURL(urlParams.get("source"));
+    }
 };
 
+function GetDataFromURL(url){
+    fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    uploadedFileName = "file.json";
+    document.getElementById('file-info').textContent = "API response";
+    DisplayData(data, document.getElementById("table-container"), false);
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+}
 
-function LoadData(Fileselectevent){
-    const file = Fileselectevent.target.files[0];
+function LoadData(fileselectevent){
+    const file = fileselectevent.target.files[0];
     if (file && file.type === 'application/json') {
         uploadedFileName = file.name; // Save the uploaded file name
         document.getElementById('file-info').textContent = file.name; // Display the file name
@@ -248,8 +264,6 @@ function convertDataType(value, targetType) {
         }
     
 }
-
-// Examples
 
 function SelectType(typeselector_element){
     let data = ExtractData(SelectedData.children[1]);

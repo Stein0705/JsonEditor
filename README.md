@@ -4,6 +4,7 @@ Features:
   - Handles null, strings, bools, int, float, arrays and object
   - Strings, bools int and float can be edited
   - Ability to change any data type
+  - Ability to open a file via giving an API url as URL parameter "source"
 
 Features to come:
   - Editing of array and object structure itself
