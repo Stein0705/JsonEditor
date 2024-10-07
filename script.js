@@ -76,6 +76,7 @@ function DisplayData(data, container, iskey){
         value = document.createElement("TEXTAREA");
         value.className = "textfield";
         value.value = data
+        value.rows = 1;
         container.appendChild(value);
         return;
     }

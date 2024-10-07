@@ -68,12 +68,13 @@ th{
 
 .textfield{
     flex-grow: 1;           /* Allow the textarea to grow and fill remaining space */
-    resize: both;
+    resize: vertical;
     box-sizing: border-box; 
     
     background : transparent;
     display:inline-flex;
     
+    min-height: 100%;
 }
 
 
@@ -108,6 +109,8 @@ th > .textfield{
     border: var(--secondary-color);
     border-radius: 8px;
     color: var(--secondary-color);
+    width: 100%;
+    justify-content: center;
 }
 
 td > .textfield{
